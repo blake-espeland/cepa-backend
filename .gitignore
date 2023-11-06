@@ -1,5 +1,1 @@
-/target
-/db
-
-# Want to keep the sim cfg for example
-!sim_cfg.json
+/.vscode
