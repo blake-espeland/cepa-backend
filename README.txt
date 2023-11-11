@@ -22,7 +22,7 @@ Consistency - The database must maintain consistency before and after a transact
 Isolation - Multiple requests can happen at the same time without interferrence (parallelism).
 Durability - The database carries on even after a failed request.
 
-*Main goals of (socialist) economic planning*
+*Main goals of national economic planning*
 1. Shorten work week for all. Since value is represented in terms of labor hours, there will be an
 incentive to reduce the amount of working hours required to complete projects and produce products.
 2. Place ecological and humanitarian constraints on production. Since profit is not the primary
