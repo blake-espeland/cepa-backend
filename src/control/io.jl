@@ -5,15 +5,34 @@
     2023 - MIT Lisense
 """
 
-module MLIO
+try
+    using CSV, DataFrames
+catch Exception
+    import Pkg
+    Pkg.add("CSV")
+    Pkg.add("DataFrames")
+
+    using CSV, DataFrames
+end 
+
+const IO_PREFIX::String = "[IO]:"
 
 # relative root directory of data
-DATA_DIR::String = "../../data/"
+const DATA_DIR::String = "../../data/"
 
 # Hyper parameter store path
-HYPER_CFG::String = "hyper.csv"
+const HYPER_CFG::String = "hyper.csv"
 
 # Raw technology data store path
-TECH_DATA::String = DATA_DIR * "tech_data.csv"
+const TECH_DATA::String = DATA_DIR * "tech_data.csv"
 
-end # end module
+
+function read_csv(path::String)::AbstractArray
+    println("$IO_PREFIX Reading $path")
+    df::DataFrame = CSV.read(path, DataFrame)
+end
+
+
+function get_io_table()::AbstractArray
+    return read_csv(DATA_DIR + TECH_DATA)
+end

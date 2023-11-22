@@ -4,9 +4,8 @@
     Authors: Blake Espeland
     2023 - MIT Lisense
 """
-module MLTech
 
-using MLIO
+include("io.jl")
 
 using CUDA
 
@@ -21,12 +20,11 @@ const TECH_NAMES = [
 
 function generate_io_table(simulate::Bool)
     if simulate
-        tech_println("$TPREFIX Simulating IO Table...")
+        println("$TPREFIX Simulating IO Table...")
     else
-        tech_println("$TPREFIX Reading IO Table from file system...")
+        println("$TPREFIX Reading IO Table from file system...")
+        A = get_io_table()
     end
-
-    return 
+    
+    return Array.zeros(2)
 end
-
-end # MLTech

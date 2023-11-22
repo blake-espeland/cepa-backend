@@ -25,9 +25,8 @@
     2023 - MIT Lisense
 """
 
-using .MLKernels
-using .MLTech
 include("meta.jl")
+include("technology.jl")
 
 using BenchmarkTools
 
@@ -52,7 +51,7 @@ function main()
     # ------ Production Tensors ------
     # This is our IO Table, it represents the amount of resource
     # i to produce resource j (nxn).
-    io_table::CuArray = CUDA.zeros(Float16, n, n)
+    io_table = generate_io_table(false)
 
     # This is the "Use Table", or the amount of resource i used to create
     # resource j at time t.

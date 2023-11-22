@@ -1,6 +1,6 @@
 # Cybernetic Economic Planning Agent (CEPA)  
 
-## Library for the backend to the CEPA  
+## CEPA Server Application
 
 Author: Blake Espeland
 
@@ -12,6 +12,7 @@ Currently contains the following components:
 
 Future components:
 [] Doctor: Manage faults and performance of the entire system. Likely one of the next components to get developed.
+[] Translator: HAL for Julia to interact with. Support for NVidia, AMD, and Intel GPUs eventually
 [] LoadManager: Manage request and resonse load. Plans to start development once frontend is complete.
 [] Database: Plans for using PostgreSQL. Still need to work out requirements for schema.
 

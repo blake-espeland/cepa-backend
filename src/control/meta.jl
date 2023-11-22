@@ -21,7 +21,3 @@ end
 function tech_list_names()::Array
     return
 end
-
-
-function tech_read()
-end
