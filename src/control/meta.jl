@@ -15,7 +15,9 @@ const HYPER_CFG::String = "../../data/hyper.csv"
 HyperParameters::AbstractDict = Dict([
     ("simulate", true),
     ("nyears", 1),
-    ("harmonyEps", 1.1)
+    ("harmonyEps", 1.1),
+    ("iot_σ", 20),
+    ("use_σ", 20)
 ])
 
 function meta_read_meta()

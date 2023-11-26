@@ -42,36 +42,26 @@ const TECH_PATH = Dict([
 ])
 
 function _tech_simulate_tensor(tensor_type::TECH_TENSOR_VERSION)
-    ω = tech_cardinality()
+    A::AbstractArray
 
-    @match tensor_type begin
-        IO_TENSOR => begin
-            
-        end
-        USE_TENSOR => begin
-            
-        end
-        OUTPUT_TENSOR => begin
-            
-        end
-        CAP_CONSTRAINTS_TENSOR => begin
-            
-        end
-        CAP_ACC_CONSTRAINTS_TENSOR => begin
-                    
-        end
-        CAP_STOCK_TENSOR => begin
-                    
-        end
-        PROD_CONSUMPTION_TENSOR ||
-        FINAL_CONSUMPTION_TENSOR => begin
-            println("Tensor is calculated, not generated")
-            return
-        end
-        _ => begin
-            
-        end
+    M = tech_cardinality()
+    N = tech_cardinality()
+    T = HyperParameters["nyears"]
+
+    A = @match tensor_type begin
+        $IO_TENSOR => randn(HyperParameters["iot_σ"], (M, N))
+        $USE_TENSOR => randn((M, N, T))
+        $OUTPUT_TENSOR => zeros((M, T))
+        $CAP_CONSTRAINTS_TENSOR => randn((M, N, T))
+        $CAP_ACC_CONSTRAINTS_TENSOR => randn((M, N, T))
+        $CAP_STOCK_TENSOR => randn((M, N, T))
+        # Invalid tensor arguments
+        $PROD_CONSUMPTION_TENSOR ||
+        $FINAL_CONSUMPTION_TENSOR => println("Tensor is calculated, not generated")
+        _ => println("Invalid tensor type")
     end
+
+    return A
 end
 
 function tech_generate_tensor(tensor_type::TECH_TENSOR_VERSION)
@@ -81,34 +71,21 @@ function tech_generate_tensor(tensor_type::TECH_TENSOR_VERSION)
 
     A::AbstractArray
 
-    @match tensor_type begin
-        IO_TENSOR => begin
-            shape = ()
-            io_read_bytes_as_aa(TECH_PATH[tensor_type])
-        end
-        USE_TENSOR => begin
-            
-        end
-        OUTPUT_TENSOR => begin
-            
-        end
-        CAP_CONSTRAINTS_TENSOR => begin
-            
-        end
-        CAP_ACC_CONSTRAINTS_TENSOR => begin
-                    
-        end
-        CAP_STOCK_TENSOR => begin
-                    
-        end
-        PROD_CONSUMPTION_TENSOR ||
-        FINAL_CONSUMPTION_TENSOR => begin
-            println("Tensor is calculated, not generated")
-            return
-        end
-        _ => begin
-            
-        end
+    M = tech_cardinality()
+    N = tech_cardinality()
+    T = HyperParameters["nyears"]
+
+    A = @match tensor_type begin
+        $IO_TENSOR => io_read_bytes_as_aa(TECH_PATH[tensor_type], (M, N))
+        $USE_TENSOR => io_read_bytes_as_aa(TECH_PATH[tensor_type], (M, N, T))
+        $OUTPUT_TENSOR => io_read_bytes_as_aa(TECH_PATH[tensor_type], (M, T))
+        $CAP_CONSTRAINTS_TENSOR => io_read_bytes_as_aa(TECH_PATH[tensor_type], (M, N, T))
+        $CAP_ACC_CONSTRAINTS_TENSOR => io_read_bytes_as_aa(TECH_PATH[tensor_type], (M, N, T))
+        $CAP_STOCK_TENSOR => io_read_bytes_as_aa(TECH_PATH[tensor_type], (M, N, T))
+        # Invalid tensor arguments
+        $PROD_CONSUMPTION_TENSOR ||
+        $FINAL_CONSUMPTION_TENSOR => println("Tensor is calculated, not generated")
+        _ => println("Invalid tensor type")
     end
 
     return A
