@@ -38,46 +38,44 @@ function main()
     end
 
     CUDA.allowscalar(false) # disallowing scalar indexing of CuArray's
-
-    n::Int32 = 100 # number of resources
-    ω::Int8 = 3 # plan horizon
-
-    t::Int8 = 1 # timestep
-
-    # ------ Auxillary Tensors ------
-    # Capital Constraints
-    capital_constraints::CuArray = CUDA.zeros(Float16, n, n)
-
+    meta_read_meta() # Populate HyperParameters
+    
     # ------ Production Tensors ------
     # This is our IO Table, it represents the amount of resource
     # i to produce resource j (nxn).
-    io_table = generate_io_table(false)
+    io_table = tech_generate_tensor(IO_TENSOR)
 
     # This is the "Use Table", or the amount of resource i used to create
     # resource j at time t.
-    use::CuArray = CUDA.zeros(Float16, ω, n, n)
+    use = tech_generate_tensor(USE_TENSOR)
     
     # This is the "Output Table", or the output of industry j at time t.
     # o_{i,j} ≤ (u_{t,i,j})/(a_{i,j}) ∀ t
-    outputs::CuArray = CUDA.zeros(Float16, ω, n)
+    outputs = tech_generate_tensor(OUTPUT_TENSOR)
+
+    # ------ Auxillary Tensors ------
+    # Capital Constraints
+    capital_constraints = tech_generate_tensor(CAP_CONSTRAINTS_TENSOR)
 
     # ------ Stock Tensors ------
     # This is the "Accumulation of stocks" of resource i for resource j
     # at time t.
-    capital_stock_acc::CuArray = CUDA.zeros(Float16, ω, n, n)
+    capital_stock_acc = tech_generate_tensor(CAP_ACC_CONSTRAINTS_TENSOR)
 
     # This is the "Capital Stock" tensor, denoting the amount of stock from 
     # resource i to produce resource j at time t.
     # s_{t,i,j} = (1 - d{i,j})s_{t-1,i,j}+α_{t-1,i,j}
-    capital_stock::CuArray = CUDA.zeros(Float16, ω, n, n)
+    capital_stock = tech_generate_tensor(CAP_STOCK_TENSOR)
 
     # ------ Consumption Tensors ------
     # P = ∑_i(u_{t,j,i}) ⟶ Reduce U along second axis with 'sum' function
-    productive_consumption::CuArray = mapreduce(identity, +, use; dims=2)
+    productive_consumption = mapreduce(identity, +, use; dims=2)
     productive_consumption = reshape(productive_consumption, (ω, n))
 
     # F = O - Α - P
     final_consumption::CuArray = outputs .- capital_stock_acc .- productive_consumption
+
+
 end
 
 main()

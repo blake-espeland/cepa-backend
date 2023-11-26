@@ -3,4 +3,7 @@
 import Pkg
 
 Pkg.add("CUDA")
+Pkg.add("Match")
+Pkg.add("CSV") 
+Pkg.add("DataFrames")
 Pkg.add("BenchmarkTools")

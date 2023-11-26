@@ -1,4 +1,4 @@
-module src/server/server
+module src/server/main
 
 go 1.21.3
 

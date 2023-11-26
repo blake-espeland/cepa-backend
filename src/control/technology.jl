@@ -6,10 +6,24 @@
 """
 
 include("io.jl")
+include("meta.jl")
 
 using CUDA
+using Match
 
 const TPREFIX = "[TECH]:"
+
+@enum TECH_TENSOR_VERSION begin
+    IO_TENSOR
+    USE_TENSOR
+    OUTPUT_TENSOR
+    CAP_CONSTRAINTS_TENSOR
+    CAP_ACC_CONSTRAINTS_TENSOR
+    CAP_STOCK_TENSOR
+    PROD_CONSUMPTION_TENSOR
+    FINAL_CONSUMPTION_TENSOR
+end
+
 const TECH_NAMES = [
     "agriculture"
     "industry_inc_eng"
@@ -18,13 +32,100 @@ const TECH_NAMES = [
     "foreign_trade"
 ]
 
-function generate_io_table(simulate::Bool)
-    if simulate
-        println("$TPREFIX Simulating IO Table...")
-    else
-        println("$TPREFIX Reading IO Table from file system...")
-        A = get_io_table()
+const TECH_PATH = Dict([
+    (IO_TENSOR, "../../data/io.tensor"),
+    (USE_TENSOR, "../../data/use.tensor"),
+    (OUTPUT_TENSOR, "../../data/output.tensor"),
+    (CAP_CONSTRAINTS_TENSOR, "../../data/cap_constraints.tensor"),
+    (CAP_ACC_CONSTRAINTS_TENSOR, "../../data/cap_acc_constraints.tensor"),
+    (CAP_STOCK_TENSOR, "../../data/cap_stock.tensor"),
+])
+
+function _tech_simulate_tensor(tensor_type::TECH_TENSOR_VERSION)
+    ω = tech_cardinality()
+
+    @match tensor_type begin
+        IO_TENSOR => begin
+            
+        end
+        USE_TENSOR => begin
+            
+        end
+        OUTPUT_TENSOR => begin
+            
+        end
+        CAP_CONSTRAINTS_TENSOR => begin
+            
+        end
+        CAP_ACC_CONSTRAINTS_TENSOR => begin
+                    
+        end
+        CAP_STOCK_TENSOR => begin
+                    
+        end
+        PROD_CONSUMPTION_TENSOR ||
+        FINAL_CONSUMPTION_TENSOR => begin
+            println("Tensor is calculated, not generated")
+            return
+        end
+        _ => begin
+            
+        end
     end
-    
-    return Array.zeros(2)
+end
+
+function tech_generate_tensor(tensor_type::TECH_TENSOR_VERSION)
+    if HyperParameters["simulate"]
+        return _tech_simulate_tensor(tensor_type)
+    end
+
+    A::AbstractArray
+
+    @match tensor_type begin
+        IO_TENSOR => begin
+            shape = ()
+            io_read_bytes_as_aa(TECH_PATH[tensor_type])
+        end
+        USE_TENSOR => begin
+            
+        end
+        OUTPUT_TENSOR => begin
+            
+        end
+        CAP_CONSTRAINTS_TENSOR => begin
+            
+        end
+        CAP_ACC_CONSTRAINTS_TENSOR => begin
+                    
+        end
+        CAP_STOCK_TENSOR => begin
+                    
+        end
+        PROD_CONSUMPTION_TENSOR ||
+        FINAL_CONSUMPTION_TENSOR => begin
+            println("Tensor is calculated, not generated")
+            return
+        end
+        _ => begin
+            
+        end
+    end
+
+    return A
+end
+
+"""
+    enumerate_industries()::Int32
+
+    Function to provide the number of evaluated industries 
+    1. Read config from filesystem
+    2. Parse number of considered industries
+"""
+function tech_cardinality()::Int32
+    return size(TECH_NAMES, 1)
+end
+
+
+function tech_list_names()::Array
+    return TECH_NAMES
 end

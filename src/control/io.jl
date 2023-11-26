@@ -15,24 +15,15 @@ catch Exception
     using CSV, DataFrames
 end 
 
-const IO_PREFIX::String = "[IO]:"
+const IO_PREFIX = "[IO]:"
 
-# relative root directory of data
-const DATA_DIR::String = "../../data/"
+io_read_csv_as_df(path::String) = CSV.read(path, DataFrame)
 
-# Hyper parameter store path
-const HYPER_CFG::String = "hyper.csv"
-
-# Raw technology data store path
-const TECH_DATA::String = DATA_DIR * "tech_data.csv"
-
-
-function read_csv(path::String)::AbstractArray
-    println("$IO_PREFIX Reading $path")
-    df::DataFrame = CSV.read(path, DataFrame)
+function io_read_csv_as_aa(path::String)::AbstractArray
+    df::DataFrame = io_read_csv_as_df(path)
+    return collect(eachrow(df))
 end
 
+function io_read_bytes_as_aa(path::String)::AbstractArray
 
-function get_io_table()::AbstractArray
-    return read_csv(DATA_DIR + TECH_DATA)
 end

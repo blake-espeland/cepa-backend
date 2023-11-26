@@ -5,19 +5,20 @@
     2023 - MIT Lisense
 """
 
+include("io.jl")
 
-"""
-    enumerate_industries()::Int32
+using DataFrames
 
-    Function to provide the number of evaluated industries 
-    1. Read config from filesystem
-    2. Parse number of considered industries
-"""
-function tech_number()::Int32
-    return 100
-end
+# Hyper parameter store path
+const HYPER_CFG::String = "../../data/hyper.csv"
 
+HyperParameters::AbstractDict = Dict([
+    ("simulate", true),
+    ("nyears", 1),
+    ("harmonyEps", 1.1)
+])
 
-function tech_list_names()::Array
-    return
+function meta_read_meta()
+    table = io_read_csv_as_df(HYPER_CFG)
+    println(table)
 end
